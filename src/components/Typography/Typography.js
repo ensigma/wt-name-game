@@ -7,6 +7,9 @@ const Typography = (props) => {
         <StyledTypography 
             theme={ props.theme } 
             justifyContent={ props.justifyContent }
+            fontWeight={ props.fontWeight }
+            fontSize={ props.fontSize }
+            margin={ props.margin }
         >
             { props.children }
         </StyledTypography>

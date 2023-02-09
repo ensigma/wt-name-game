@@ -18,4 +18,16 @@ export const StyledTypography = styled.p`
      ${({justifyContent}) => justifyContent === 'center' && `
         justify-content: center;
     `}
+
+    ${({fontWeight}) => fontWeight && `
+        font-weight: ${fontWeight};
+    `}
+
+    ${({fontSize}) => fontSize && `
+        font-size: ${fontSize}px;
+    `}
+
+    ${({margin}) => margin && `
+        margin: ${margin};
+    `}
 `;

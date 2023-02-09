@@ -38,7 +38,6 @@ export const StyledTextLogo = styled.img`
     @media ${device.mobileS} {
         height: auto;
         width: 75%;
-        margin-left: 3%;
     }
     @media ${device.laptop} {
         width: 324.37px;

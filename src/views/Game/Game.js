@@ -7,11 +7,10 @@ import { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import Typography from '../../components/Typography/Typography';
 import Profile from '../../components/Profile/Profile';
+import Button from '../../components/Button/Button';
 
 //Utilites
-
-import randomArraySelector from '../../utilities/RandomArraySelector';
-
+import { getMultipleRandom, getSingleRandom } from '../../utilities/utilites';
 
 // Styled Components 
 
@@ -22,9 +21,9 @@ import {
 
 
 const Game = () => {
-    const [error, setError] = useState(null);
+    const [profiles, setProfiles] = useState([]);
     const [randomSixProfiles, setRandomSixProfiles] = useState([]);
-    const [currentProfileName, setCurrentProfileName] = useState('');
+    const [randomSingleProfile, setRandomSingleProfile] = useState({});
 
 
     useEffect(() => {
@@ -36,44 +35,64 @@ const Game = () => {
             },
     
         }
-        fetch('https://namegame.willowtreeapps.com/api/v1.0/profiles', requestOptions)
-            .then(response => { 
-                if(response.ok) {
-                    return response.json();
-                }
-                throw response;
-            })
-            .then(response => {
-                const arrayProfiles = [];
-                for (let i = 0; i <= 5; i++) {
-                    arrayProfiles.push(randomArraySelector(response));
-                }
-                setRandomSixProfiles(arrayProfiles);
-                const randomProfile = randomArraySelector(randomSixProfiles)
-                setCurrentProfileName(`${randomProfile.firstName} ${randomProfile.lastName}`);
-            })
-            .catch((error) => {
-                console.error("Error fetching data: ", error);
-                setError(error);
-              });
+        fetch(
+          "https://namegame.willowtreeapps.com/api/v1.0/profiles",
+          requestOptions
+        )
+        .then(response => response.json())
+        .then(data => {
+            setProfiles(data);
+        });
     }, []);
 
+    useEffect(() => {
+      const randomProfiles = getMultipleRandom(profiles, 6);
+      setRandomSixProfiles(randomProfiles);
+    }, [profiles]);
+
+    useEffect(() => {
+      const randomProfile = getSingleRandom(randomSixProfiles);
+      setRandomSingleProfile(randomProfile);
+    }, [randomSixProfiles]);
+
     return (
-        <>
-            <Header />
-            <StyledGameWrapper>
-                <Typography theme='dark' justifyContent='center'>
-                    Which one of these good looking photos is the real
-                </Typography>
-                <UserProfileWrapper>
-                {randomSixProfiles.map(profile=> {
-                    return (
-                        <Profile key={profile.id} profile={profile} />
-                    );
-                })}
-                </UserProfileWrapper>
-            </StyledGameWrapper>
-        </>
+      <>
+        <Header />
+        <StyledGameWrapper>
+          <Typography theme="dark" justifyContent="center">
+            Which one of these good looking photos is the real {randomSingleProfile && randomSingleProfile.firstName} {randomSingleProfile && randomSingleProfile.lastName}?
+          </Typography>
+          <Typography
+            theme="dark"
+            justifyContent="center"
+            fontWeight="700"
+            fontSize={40}
+            margin="16px 0 0 0"
+          ></Typography>
+          <UserProfileWrapper>
+            {randomSixProfiles.map((profile) => {
+              return (
+                <Profile
+                  key={profile.id}
+                  profile={profile}
+                  randomSingleProfile={randomSingleProfile}
+                  UserProfileWrapper={UserProfileWrapper}
+                />
+              );
+            })}
+          </UserProfileWrapper>
+          <Button
+            className="continueButton"
+            justifyContent="center"
+            theme="dark"
+            margin="0 auto"
+            disabled={true}
+            onClick={() => console.log("clicked")}
+          >
+            Continue
+          </Button>
+        </StyledGameWrapper>
+      </>
     );
 };
 

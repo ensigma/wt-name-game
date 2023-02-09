@@ -32,4 +32,11 @@ export const StyledButton = styled.button`
         background: rgba(21, 101, 157, 0.2);
         cursor: not-allowed;
     `}
+    ${({justifyContent}) => justifyContent === 'center' && `
+        justify-content: center;
+    `}
+
+    ${({margin}) => margin && `
+        margin: ${margin};
+    `}
 `;

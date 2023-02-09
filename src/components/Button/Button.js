@@ -7,6 +7,8 @@ const Button = (props) => {
         <StyledButton
             disabled={props.disabled}
             onClick={props.onClick}
+            justifyContent={props.justifyContent}
+            margin={props.margin}
         >
             { props.children }
         </StyledButton>
